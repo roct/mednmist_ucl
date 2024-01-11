@@ -16,20 +16,20 @@ parser.add_argument('-m', '--mednmist', action='store_true', help='load the file
 
 args = parser.parse_args()
 
-if (args.type == 'A') and (args.file is not None):
+if (args.type in ['a', 'A']) and (args.file is not None):
     print('Loading model for task A')
     taskA_load_dataset(args.file)
 
-if (args.type == 'A') and (args.mednmist):
+if (args.type in ['a', 'A']) and (args.mednmist):
     print('Loading test dataset from mednmist website')
     taskA_load_model_and_evaluate()
 
 
-if (args.type == 'B') and (args.file is not None):
+if (args.type in ['b', 'B']) and (args.file is not None):
     print('Loading model for task A')
     taskB_load_dataset(args.file)
 
-if (args.type == 'B') and (args.mednmist):
+if (args.type in ['b', 'B']) and (args.mednmist):
     print('Loading test dataset from mednmist website')
     taskB_load_model_and_evaluate()
 
