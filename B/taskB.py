@@ -38,13 +38,23 @@ def train_and_save_optimal_model():
     train_val_images, train_val_labels, test_images, test_labels = load_from_medmnist()
     optimal_model = create_CNN_model(num_layers=7, nodes=32, activation='relu', learning_rate=0.001)
     training_optimal = optimal_model.fit(train_val_images, train_val_labels, epochs=9, batch_size=32, validation_split=0.2, verbose=1)
-    optimal_model.save('optimal_model.h5')
+    optimal_model.save('B/optimal_model.h5')
     
 def load_model_and_evaluate():
     train_val_images, train_val_labels, test_images, test_labels = load_from_medmnist()
-    optimal_model = tf.keras.models.load_model('optimal_model.h5')
+    optimal_model = tf.keras.models.load_model('B/optimal_model2.h5')
     optimal_model_eval = optimal_model.evaluate(test_images, test_labels, verbose=1)
     print('TaskB model testing evaluation:', optimal_model_eval[1])
 
-# load_model_and_evaluate()
-train_and_save_optimal_model()
+def load_dataset_npz(filepath):
+    """Load dataset from npz file"""
+    try:
+        loaded_dataset = np.load(filepath)
+    except FileNotFoundError:
+        print("File not found.")
+        return False
+    test_images = loaded_dataset['test_images']
+    test_labels = loaded_dataset['test_labels']
+    best_model = tf.keras.models.load_model('B/optimal_model2.h5')
+    best_model_eval = best_model.evaluate(test_images, test_labels, verbose=1)
+    print('TaskB model testing evaluation:', best_model_eval[1])

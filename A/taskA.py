@@ -45,9 +45,37 @@ def train_and_save_optimal_model():
 
 def load_model_and_evaluate():
     train_val_images, train_val_labels, test_images, test_labels = load_from_medmnist()
-    best_model = tf.keras.models.load_model('best_model.h5')
+    best_model = tf.keras.models.load_model('A/best_model.h5')
     best_model_eval = best_model.evaluate(test_images, test_labels, verbose=1)
     print('TaskA model testing evaluation:', best_model_eval[1])
 
-load_model_and_evaluate()
-# train_and_save_optimal_model()
+def predict(file):
+    model = tf.keras.models.load_model('A/best_model.h5')
+    try:
+        img_array = np.loadtxt(file, delimiter=",")
+    except FileNotFoundError:
+        print("File not found.")
+        return False
+    predictions = model.predict(img_array.reshape(1, 28, 28, 1))
+    score = predictions[0]
+    print(score)
+    if score < 0.5:
+        print('Pneumonia')
+    else:
+        print('Normal')
+
+def load_dataset_npz(filepath):
+    try:
+        loaded_dataset = np.load(filepath)
+    except FileNotFoundError:
+        print("File not found.")
+        return False
+    # Extract images and labels from dataset
+    print(type(loaded_dataset))
+    test_images = loaded_dataset['test_images']
+    test_labels = loaded_dataset['test_labels']
+    # test_images = np.array([np.array(loaded_dataset[n][0]) for n in range(len(loaded_dataset))])
+    # test_labels = np.array([np.array(loaded_dataset[n][1]) for n in range(len(loaded_dataset))])
+    best_model = tf.keras.models.load_model('A/best_model.h5')
+    best_model_eval = best_model.evaluate(test_images, test_labels, verbose=1)
+    print('TaskA model testing evaluation:', best_model_eval[1])
